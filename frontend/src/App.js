@@ -1,22 +1,23 @@
-import React from "react";
-import ChatInterface from "./Components/ChatInterface";
+import React, { useState } from "react";
 import Sidebar from "./Components/Sidebar";
-import "./App.css"; // Assuming you have some global styles
-const App = () => {
-  const [selectedChatId, setSelectedChatId] = React.useState("");
-  console.log(selectedChatId);
-  
+import ChatInterface from "./Components/ChatInterface";
+import "./App.css"
+export default function App() {
+  const [selectedChatId, setSelectedChatId] = useState(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
   return (
-    <div className="flex">
+    <div style={{ display: "flex" }}>
       <Sidebar
+        isCollapsed={isSidebarCollapsed}
+        setIsCollapsed={setIsSidebarCollapsed}
         selectedChatId={selectedChatId}
         setSelectedChatId={setSelectedChatId}
       />
-      <div className="w-full p-4">
-        <ChatInterface selectedChatId={selectedChatId} />
-      </div>
+      <ChatInterface
+        selectedChatId={selectedChatId}
+        isSidebarCollapsed={isSidebarCollapsed} // <- passed here
+      />
     </div>
   );
-};
-
-export default App;
+}

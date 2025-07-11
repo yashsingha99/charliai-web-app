@@ -7,17 +7,11 @@ const { GoogleGenAI } = require("@google/genai");
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI(process.env.API_KEY || "AIzaSyA3LFxWUF2WVsJkbpSfDbu6Af4ol-Wzv9c");
+const genAI = new GoogleGenerativeAI(process.env.API_KEY );
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash"});
-
-// Initialize Google GenAI with your API key
-// const ai = new GoogleGenAI({
-//   apiKey: process.env.GOOGLE_GENAI_API_KEY || "AIzaSyA3LFxWUF2WVsJkbpSfDbu6Af4ol-Wzv9c", // make sure it's in .env
-// });
 
 const ai = new GoogleGenAI({});
 
-// Ask a question to the character
 exports.askQuestion = async (req, res) => {
   try {
     const { question, id } = req.body;
@@ -32,7 +26,6 @@ exports.askQuestion = async (req, res) => {
       return res.status(404).json({ message: "Character not found." });
     }
 
-    // Construct character-based prompt
     const prompt = `
 You are now fully embodying the persona of **${character.name}**. 
 Respond to the following question **exactly** as ${character.name} would—capturing their unique tone, attitude, worldview, vocabulary, and emotional nuance.
@@ -53,18 +46,11 @@ Respond to the following question **exactly** as ${character.name} would—captu
 ❓ Question: ${question}
 🎙️ Response:
 `;
-
-    // Use Gemini API to generate the content
-    // const response = await ai.models.generateContent({
-    //   model: "gemini-2.0-flash",
-    //   contents : prompt
-    //  });
-
+ 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const answer = response.text();
 
-    // Save the Q&A to MongoDB
     const newAnswer = new QuestionAnswer({
       question,
       answer,
@@ -72,7 +58,6 @@ Respond to the following question **exactly** as ${character.name} would—captu
     });
     await newAnswer.save();
 
-    // Respond to client
     res.json({ answer: answer.trim() });
 
   } catch (err) {
@@ -81,7 +66,6 @@ Respond to the following question **exactly** as ${character.name} would—captu
   }
 };
 
-// Get all QAs (global history)
 exports.getPreviousQAs = async (req, res) => {
   try {
     const qas = await QuestionAnswer.find().sort({ date: 1 });
@@ -91,7 +75,6 @@ exports.getPreviousQAs = async (req, res) => {
   }
 };
 
-// Get QAs by character ID
 exports.getPreviousQAsByCharacter = async (req, res) => {
   try {
     const { id } = req.query;

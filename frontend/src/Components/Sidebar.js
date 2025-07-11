@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./Sidebar.css";
+import { Menu, Plus, ArrowLeftCircle } from "lucide-react";
 import { useModal } from "../Models/ModalContext";
-const Sidebar = ({ selectedChatId, setSelectedChatId, onNewChat }) => {
+import "./Sidebar.css";
+
+const Sidebar = ({ selectedChatId, setSelectedChatId }) => {
   const { openModal } = useModal();
   const [history, setHistory] = useState([]);
-  
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     const fetchChats = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/getCharacters");
-        console.log("Fetched chats:", res.data);
-        
         setHistory(res.data);
       } catch (err) {
         console.error("Failed to fetch chats");
@@ -21,46 +21,37 @@ const Sidebar = ({ selectedChatId, setSelectedChatId, onNewChat }) => {
     fetchChats();
   }, []);
 
-  // const handleCreateCharacter = async (characterData) => {
-  //   try {
-  //     await axios.post(
-  //       "http://localhost:5000/api/createCharacter",
-  //       characterData
-  //     );
-  //     setHistory([...history, characterData]);
-  //   } catch (err) {
-  //     console.error("Failed to create character");
-  //   }
-  // };
-
-  
-
+  const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-header">
-        <h2>🗂️ Chats</h2>
-        <button
-          className="new-chat"
-          onClick={() => openModal()}
-        >
-          + New Chat
-        </button>
+    <>
+      {/* Toggle button — always visible */}
+      <button className="sidebar-toggle" onClick={toggleSidebar}>
+        {isCollapsed ? <Menu size={22} /> : <ArrowLeftCircle size={22} />}
+      </button>
+
+      <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+        <div className="sidebar-header">
+          <h2>🗂️ Chats</h2>
+          <button className="new-chat" onClick={openModal}>
+            <Plus size={16} /> <span className="new-chat-label">New</span>
+          </button>
+        </div>
+
+        <div className="chat-history">
+          {history.map((chat) => (
+            <div
+              key={chat._id}
+              className={`chat-item ${chat._id === selectedChatId ? "active" : ""}`}
+              onClick={() => setSelectedChatId(chat._id)}
+              title={chat.name}
+            >
+              {isCollapsed ? chat.name.charAt(0).toUpperCase() : chat.name || "Untitled"}
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="chat-history">
-        {history.map((chat) => (
-          <div
-            key={chat._id}
-            className={`chat-item ${
-              chat._id === selectedChatId ? "active" : ""
-            }`}
-            onClick={() => setSelectedChatId(chat._id)}
-          >
-            {chat.name || "Untitled Chat"}
-          </div>
-        ))}
-      </div>
-    </div>
+    </>
   );
 };
 
