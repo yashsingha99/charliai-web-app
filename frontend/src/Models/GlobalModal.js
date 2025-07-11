@@ -3,7 +3,8 @@ import { useModal } from "./ModalContext";
 import "./GlobalModal.css";
 import axios from "axios";
 import { X, UserCircle } from "lucide-react"; // lucide icons
-const URI = process.env.REACT_APP_URL || "https://chatbot-6upq.onrender.com"
+const URI = process.env.REACT_APP_URL || "https://chatbot-production-e7f9.up.railway.app" 
+// "https://chatbot-6upq.onrender.com"
 export default function GlobalModal() {
   const { isOpen, closeModal } = useModal(false);
   const [character, setCharacter] = React.useState({

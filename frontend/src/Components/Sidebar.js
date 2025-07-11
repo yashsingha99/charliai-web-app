@@ -3,7 +3,9 @@ import axios from "axios";
 import { Menu, Plus, ArrowLeftCircle } from "lucide-react";
 import { useModal } from "../Models/ModalContext";
 import "./Sidebar.css";
-const URI = process.env.REACT_APP_URL || "https://chatbot-6upq.onrender.com"
+const URI = process.env.REACT_APP_URL || "https://chatbot-production-e7f9.up.railway.app" 
+
+// "https://chatbot-6upq.onrender.com"
 // console.log(URI);
 
 const Sidebar = ({ selectedChatId, setSelectedChatId }) => {

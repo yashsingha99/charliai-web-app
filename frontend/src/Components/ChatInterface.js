@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ChatInterface.css";
-const URI = process.env.REACT_APP_URL || "https://chatbot-6upq.onrender.com"
+const URI = process.env.REACT_APP_URL || "https://chatbot-production-e7f9.up.railway.app" 
+
 const ChatInterface = ({ selectedChatId, isSidebarCollapsed }) => {
   const [question, setQuestion] = useState("");
   const [qaHistory, setQaHistory] = useState([]);
