@@ -1,3 +1,5 @@
+// import dotenv from "dotenv"
+// dotenv.config();
 import React, { useState } from "react";
 import Sidebar from "./Components/Sidebar";
 import ChatInterface from "./Components/ChatInterface";

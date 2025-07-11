@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ChatInterface.css";
-
+const URI = process.env.REACT_APP_URL || "https://chatbot-6upq.onrender.com"
 const ChatInterface = ({ selectedChatId, isSidebarCollapsed }) => {
   const [question, setQuestion] = useState("");
   const [qaHistory, setQaHistory] = useState([]);
@@ -21,7 +21,7 @@ const ChatInterface = ({ selectedChatId, isSidebarCollapsed }) => {
       setLoading(true);
       if (!selectedChatId) return;
       try {
-        const res = await axios.get("http://localhost:5000/api/previousById", {
+        const res = await axios.get(`${URI}/api/previousById`, {
           params: { id: selectedChatId },
         });
         setQaHistory(res.data);
@@ -41,7 +41,7 @@ const ChatInterface = ({ selectedChatId, isSidebarCollapsed }) => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/chat", {
+      const res = await axios.post(`${URI}/api/chat`, {
         question,
         id: selectedChatId,
       });

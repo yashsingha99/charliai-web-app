@@ -5,7 +5,7 @@ import axios from "axios";
 import { X, UserCircle } from "lucide-react"; // lucide icons
 
 export default function GlobalModal() {
-  const { isOpen, setIsOpen, closeModal } = useModal(false);
+  const { isOpen, closeModal } = useModal(false);
   const [character, setCharacter] = React.useState({
     name: "",
     about: "",

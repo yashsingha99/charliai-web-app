@@ -8,7 +8,7 @@ const characterRoutes = require('./routes/character.route');
 // Create Express app
 const app = express();
 
-const MONGO_DB=process.env.MONGO_URI || 'mongodb://localhost:27017/dialog';
+const MONGO_DB=process.env.MONGO_URI;
 
 // Middleware
 app.use(cors());
