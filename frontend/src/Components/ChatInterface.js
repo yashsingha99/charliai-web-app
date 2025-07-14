@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ChatInterface.css";
-const URI = process.env.REACT_APP_URL 
+const URI = process.env.REACT_APP_URL ||
 // || "http://localhost:8080"
 "https://chatbot-production-e7f9.up.railway.app" 
 
@@ -66,7 +66,6 @@ const ChatInterface = ({ selectedChatId, isSidebarCollapsed }) => {
       setQuestion((prev) => prev + "\n");
     }
   };
-  console.log(qaHistory);
   
   const handleChange = (e) => {
     if (e.target.value.length > 500) {
