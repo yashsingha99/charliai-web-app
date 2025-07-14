@@ -3,7 +3,9 @@ import { useModal } from "./ModalContext";
 import "./GlobalModal.css";
 import axios from "axios";
 import { X, UserCircle } from "lucide-react"; // lucide icons
-const URI = process.env.REACT_APP_URL || "https://chatbot-production-e7f9.up.railway.app" 
+const URI = process.env.REACT_APP_URL 
+// || "http://localhost:8080"
+|| "https://chatbot-production-e7f9.up.railway.app" 
 // "https://chatbot-6upq.onrender.com"
 export default function GlobalModal() {
   const { isOpen, closeModal } = useModal(false);
@@ -17,9 +19,14 @@ export default function GlobalModal() {
 
   const handler = async () => {
     try {
+      const sessionId = localStorage.getItem("sessionId")
+      if(!sessionId){
+        console.log("session is expired")
+        return ;
+      }
       const res = await axios.post(
         `${URI}/api/createCharacter`,
-        character
+        {...character, sessionId}
       );
       console.log("Created:", res.data);
       closeModal();

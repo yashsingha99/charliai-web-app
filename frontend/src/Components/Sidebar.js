@@ -3,7 +3,9 @@ import axios from "axios";
 import { Menu, Plus, ArrowLeftCircle } from "lucide-react";
 import { useModal } from "../Models/ModalContext";
 import "./Sidebar.css";
-const URI = process.env.REACT_APP_URL || "https://chatbot-production-e7f9.up.railway.app" 
+const URI = process.env.REACT_APP_URL 
+// || "http://localhost:8080"
+|| "https://chatbot-production-e7f9.up.railway.app" 
 
 // "https://chatbot-6upq.onrender.com"
 // console.log(URI);
@@ -15,8 +17,13 @@ const Sidebar = ({ selectedChatId, setSelectedChatId }) => {
 
   useEffect(() => {
     const fetchChats = async () => {
+      const sessionId = localStorage.getItem("sessionId")
+      if(!sessionId) {
+        console.log("session is expired");
+        return ;
+      }
       try {
-        const res = await axios.get(`${URI}/api/getCharacters`);
+        const res = await axios.get(`${URI}/api/getCharacters?sessionId=${sessionId}`);
         setHistory(res.data);
       } catch (err) {
         console.error("Failed to fetch chats");
