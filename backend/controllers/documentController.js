@@ -1,16 +1,11 @@
 const dotenv = require("dotenv").config();
-
 const axios = require("axios");
 const QuestionAnswer = require("../models/questionAnswer");
 const Character = require("../models/character");
-const { GoogleGenAI } = require("@google/genai");
-
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY );
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash"});
-
-const ai = new GoogleGenAI({});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 exports.askQuestion = async (req, res) => {
   try {
@@ -20,37 +15,49 @@ exports.askQuestion = async (req, res) => {
       return res.status(400).json({ message: "Question and character ID are required." });
     }
 
-    // Find the character by ID
+    // Fetch previous chat history
+    const prevChattes = await QuestionAnswer.find({ character: id }).select("question answer");
     const character = await Character.findById(id);
     if (!character) {
       return res.status(404).json({ message: "Character not found." });
     }
 
+    // 🧠 Build context history
+    const conversationHistory = prevChattes
+      .map((msg, idx) => `User: ${msg.question}\n${character.name}: ${msg.answer}`)
+      .join("\n\n");
+
+    // 💬 Enhanced prompt for multimedia response support
     const prompt = `
-You are now fully embodying the persona of **${character.name}**. 
-Respond to the following question **exactly** as ${character.name} would—capturing their unique tone, attitude, worldview, vocabulary, and emotional nuance.
+You are fully and exclusively roleplaying as **${character.name}**.
+You can now respond using rich media formats (Markdown, tables, public image links, links to files, etc.)
 
-🎭 Stay completely in character:
-- Mimic their iconic speech style, catchphrases, slang, dialect, or verbal quirks.
-- Reflect their values, humor, background, and typical behavior.
-- If they are from a known universe, reference events, people, or situations they would naturally talk about.
-- Be bold—don't explain or break character. Do NOT say “As an AI…” or comment on being artificial.
-- Avoid modern or out-of-character phrases unless ${character.name} would use them.
+🎭 STAY 100% IN CHARACTER:
+- Use ${character.name}'s exact tone, slang, behavior, and history.
+- NEVER break character. NEVER say you're AI.
+- You CAN use markdown, tables, and public images or file links — like you're replying in an advanced chat.
 
-🎤 Imagine the character is answering live in an interview, script, or casual dialogue—keep it real, raw, and *them*.
+✅ Supported response formats:
+- **Markdown** formatting
+- **Tables** (for data)
+- **Images** from PUBLIC sources (unsplash, wikimedia, etc.)
+- **Files/Links** (if relevant to the topic)
 
-🧠 If the character is fictional, use their most well-known portrayals. If real, reflect their public persona.
+📜 Use the following history to understand context:
+${conversationHistory}
 
----
-🧍 Character: ${character.name}
-❓ Question: ${question}
-🎙️ Response:
+❓ Current User Question:
+${question}
+
+🎙️ Respond AS ${character.name} using Markdown, images, tables, or links if needed:
 `;
- 
+
+    // 🧠 Call Gemini
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    const answer = response.text();
+    const answer = response.text(); // Already supports Markdown from Gemini
 
+    // Save new response to DB
     const newAnswer = new QuestionAnswer({
       question,
       answer,
@@ -58,8 +65,11 @@ Respond to the following question **exactly** as ${character.name} would—captu
     });
     await newAnswer.save();
 
-    res.json({ answer: answer.trim() });
-
+    // Send structured response
+    res.json({
+      answer: answer.trim(),
+      format: "markdown", // helps frontend know how to render
+    });
   } catch (err) {
     console.error("Error in askQuestion:", err.message);
     res.status(500).json({ message: "Server Error" });

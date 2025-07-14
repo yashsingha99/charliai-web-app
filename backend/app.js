@@ -4,11 +4,16 @@ const cors = require('cors');
 const path = require('path');
 const documentRoutes = require('./routes/documentRoutes');
 const characterRoutes = require('./routes/character.route');
+const  Session = require('./models/session');
 
-// Create Express app
+
 const app = express();
 
 const MONGO_DB=process.env.MONGO_URI;
+
+
+
+
 
 // Middleware
 app.use(cors());
@@ -22,6 +27,36 @@ mongoose.connect(MONGO_DB, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Routes
 app.use('/api', documentRoutes);
+
+app.post('/api/session', async (req, res) => {
+  try {
+    const { fingerprint } = req.body;
+  
+    // console.log(fingerprint);
+    
+  
+    if (!fingerprint) {
+      return res.status(400).json({ error: 'Fingerprint required' });
+    }
+    // console.log("session");
+  
+    let session = await Session.findOne({ fingerprint });
+    
+    if (!session) {
+      session = await Session.create({
+        fingerprint,
+        createdAt: new Date(),
+      });
+    }
+  
+    return res.status(200)
+    .json({ sessionId: session._id });
+  } catch (error) {
+    return res.status(400)
+  }
+});
+
+
 // app.use('/character', characterRoutes);
 
 // Serve React app (for production)

@@ -5,6 +5,12 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+
+  sessionUser: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Session",
+    required: true
+  },
   
   about: {
     type: String,
