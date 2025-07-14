@@ -7,6 +7,9 @@ import "./App.css";
 // import { v4 as uuidv4 } from "uuid";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import axios from "axios";
+const URI = process.env.REACT_APP_URL ||
+// || "http://localhost:8080"
+"https://chatbot-production-e7f9.up.railway.app" 
 
 export async function getOrCreateSession() {
   try {
@@ -15,7 +18,7 @@ export async function getOrCreateSession() {
     const fingerprint = result.visitorId;
     //  console.log(fingerprint);
 
-    const response = await axios.post("http://localhost:8080/api/session", {
+    const response = await axios.post(`${URI}/api/session`, {
       fingerprint,
     });
 
