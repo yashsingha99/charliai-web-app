@@ -32,11 +32,10 @@ export default function AppSidebar() {
   const { openModal, newCreatedId } = useModal();
   const [history, setHistory] = React.useState([]);
   const [historyWithQ, setHistoryWithQ] = React.useState([]);
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isSidebarOpen, setSidebarOpen] = React.useState(true);
   // const selectedChatId = searchParams.get("chatId");
-
+  const navigate = useNavigate();
   React.useEffect(() => {
     const fetchChats = async () => {
       const sessionId = localStorage.getItem("sessionId");
@@ -96,7 +95,7 @@ export default function AppSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton onClick={() => navigate("/")} size="lg" asChild>
               <a href="#">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <GalleryVerticalEnd className="size-4" />
