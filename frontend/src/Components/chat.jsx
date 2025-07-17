@@ -120,7 +120,7 @@ export default function Chat() {
                         </AvatarFallback>
                       </Avatar>
                     </div>
-                    <div className="flex flex-col gap-1 max-w-[60%]">
+                    <div className="flex mt-4 flex-col gap-1 w-full">
                       <div
                         className="rounded-lg bg-muted px-4 py-3"
                         dangerouslySetInnerHTML={{ __html: qa.answer }}
