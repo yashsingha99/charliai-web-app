@@ -6,7 +6,6 @@ import { Input } from "./ui/input";
 import { ScrollArea } from "./ui/scroll-area";
 import { toast, Toaster } from "sonner";
 import { Send, User } from "lucide-react";
-import { cn } from "../lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Skeleton } from "./ui/skeleton";
 import { useSearchParams } from "react-router-dom";
@@ -15,7 +14,7 @@ import CircularSpinner from "./ui/spinner";
 
 const URI = import.meta.env.VITE_APP_URL  
 
-export function Chat() {
+export default function Chat() {
   const [question, setQuestion] = useState("");
   const [qaHistory, setQaHistory] = useState([]);
   const [loading, setLoading] = useState(false);

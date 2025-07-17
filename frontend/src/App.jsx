@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import axios from "axios";
-import { AppSidebar } from "./components/app-sidebar";
+import AppSidebar  from "./Components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,14 +12,14 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "./components/ui/breadcrumb";
-import { Separator } from "./components/ui/separator";
+} from "./Components/ui/breadcrumb";
+import { Separator } from "./Components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "./components/ui/sidebar";
-import { Chat } from "./Components/chat";
+} from "./Components/ui/sidebar";
+import Chat  from "./Components/chat";
 const URI = import.meta.env.VITE_APP_URL;
 export async function getOrCreateSession() {
   try {

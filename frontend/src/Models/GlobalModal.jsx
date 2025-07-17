@@ -8,8 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/dialog";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+import { Button } from "../Components/ui/button";
+import { Input } from "../Components/ui/input";
 
 const URI = import.meta.env.VITE_APP_URL  
 

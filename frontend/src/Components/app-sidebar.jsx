@@ -28,7 +28,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 // Replace with your actual base URL
 const URI = import.meta.env.VITE_APP_URL;
 
-export function AppSidebar() {
+export default function AppSidebar() {
   const { openModal } = useModal();
   const [history, setHistory] = React.useState([]);
   const [historyWithQ, setHistoryWithQ] = React.useState([]);
