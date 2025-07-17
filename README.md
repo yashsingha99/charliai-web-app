@@ -22,7 +22,7 @@ Ensure you have the following installed:
 
 1. Clone the Repository
 ```bash
-git clone https://github.com/saksham25022004/ChatBot.git
+git clone https://github.com/yashsingha99/ChatBot.git
 ```
 2. Backend Setup
 

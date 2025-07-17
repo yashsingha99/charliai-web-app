@@ -1,3 +1,4 @@
+require("dotenv").config()
 const Character = require('../models/character');
 const Session = require('../models/session');
 
