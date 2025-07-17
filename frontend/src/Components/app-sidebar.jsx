@@ -29,7 +29,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 const URI = import.meta.env.VITE_APP_URL;
 
 export default function AppSidebar() {
-  const { openModal } = useModal();
+  const { openModal, newCreatedId } = useModal();
   const [history, setHistory] = React.useState([]);
   const [historyWithQ, setHistoryWithQ] = React.useState([]);
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ export default function AppSidebar() {
     };
 
     fetchChats();
-  }, []);
+  }, [newCreatedId]);
 
   const handleClick = (id) => {
     const newParams = new URLSearchParams(searchParams);
@@ -143,7 +143,10 @@ export default function AppSidebar() {
                           handleClick(item._id);
                         }}
                       >
-                        <span>{item.name}</span>
+                        <span className="truncate max-w-[140px] overflow-hidden whitespace-nowrap">
+                          {item.name}
+                        </span>
+
                         <Plus
                           // onClick={(e) => {
                           //   e.stopPropagation();

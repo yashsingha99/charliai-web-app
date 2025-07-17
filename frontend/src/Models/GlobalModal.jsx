@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useModal } from "./ModalContext";
 import axios from "axios";
 import { UserCircle } from "lucide-react";
@@ -10,11 +10,14 @@ import {
 } from "../Components/ui/dialog";
 import { Button } from "../Components/ui/button";
 import { Input } from "../Components/ui/input";
+import CircularSpinner from "../Components/ui/spinner";
 
-const URI = import.meta.env.VITE_APP_URL  
+const URI = import.meta.env.VITE_APP_URL;
 
 export default function GlobalModal() {
-  const { isOpen, closeModal } = useModal(false);
+  const { isOpen, closeModal } = useModal();
+  const [isLoading, setIsLoading] = useState(false);
+  const { setNewCreatedId } = useModal();
   const [character, setCharacter] = React.useState({
     name: "",
     about: "",
@@ -22,20 +25,34 @@ export default function GlobalModal() {
   });
 
   const handler = async () => {
+    const sessionId = localStorage.getItem("sessionId");
+
+    if (!sessionId) {
+      console.warn("Session expired. Please log in again.");
+      return;
+    }
+
     try {
-      const sessionId = localStorage.getItem("sessionId");
-      if (!sessionId) {
-        console.log("Session is expired");
-        return;
-      }
-      await axios.post(`${URI}/api/createCharacter`, {
+      setIsLoading(true);
+
+      const res =  await axios.post(`${URI}/api/createCharacter`, {
         ...character,
         sessionId,
       });
-      // console.log("Created:", res.data);
+      console.log(res);
+      setNewCreatedId(res.data._id);
+      // Character created successfully
       closeModal();
-    } catch (err) {
-      console.error("Failed to create character", err);
+    } catch (error) {
+      console.error("❌ Failed to create character:", error);
+      // Optional: show toast or error state here
+    } finally {
+      setIsLoading(false);
+      setCharacter({
+        name: "",
+        about: "",
+        file: "",
+      });
     }
   };
 
@@ -73,8 +90,14 @@ export default function GlobalModal() {
             }
           />
 
-          <Button type="submit" className="w-full">
-            Create
+          <Button type="submit" className="w-full flex items-center justify-center">
+            {isLoading ? (
+              <>
+                <CircularSpinner backgroundColor="white" classStyle="w-[1.5px] h-[12px]" />
+              </>
+            ) : (
+              "Create"
+            )}
           </Button>
         </form>
       </DialogContent>

@@ -98,13 +98,6 @@ export default function Chat() {
               {qaHistory.map((qa, index) => (
                 <div key={qa._id}>
                   <div className="flex gap-3 text-sm flex-row-reverse">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                      <Avatar className="size-8">
-                        <AvatarFallback>
-                          <User />
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
                     <div className="flex flex-col gap-1">
                       <div className="rounded-lg bg-muted px-4 py-3">
                         {qa.question}
@@ -113,13 +106,6 @@ export default function Chat() {
                   </div>
 
                   <div className="flex gap-3 text-sm flex-row">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
-                      <Avatar className="size-8">
-                        <AvatarFallback>
-                          <User />
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
                     <div className="flex mt-4 flex-col gap-1 w-full">
                       <div
                         className="rounded-lg bg-muted px-4 py-3"
@@ -132,7 +118,7 @@ export default function Chat() {
               {generating && (
                 <div className=" flex justify-center py-4 text-muted-foreground animate-pulse">
                    {/* Generating... */}
-                <CircularSpinner />
+                <CircularSpinner backgroundColor={"red"} />
                  </div>
               )}
             </div>
