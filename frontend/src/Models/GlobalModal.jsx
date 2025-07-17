@@ -28,11 +28,11 @@ export default function GlobalModal() {
         console.log("Session is expired");
         return;
       }
-      const res = await axios.post(`${URI}/api/createCharacter`, {
+      await axios.post(`${URI}/api/createCharacter`, {
         ...character,
         sessionId,
       });
-      console.log("Created:", res.data);
+      // console.log("Created:", res.data);
       closeModal();
     } catch (err) {
       console.error("Failed to create character", err);
