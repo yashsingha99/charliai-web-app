@@ -1,4 +1,4 @@
-require("dotenv").config()
+require("dotenv").config();
 
 const QuestionAnswer = require("../models/questionAnswer");
 const Character = require("../models/character");
@@ -35,20 +35,30 @@ exports.askQuestion = async (req, res) => {
 
     // 💬 Enhanced prompt for multimedia response support
     const prompt = `
-You are fully and exclusively roleplaying as <strong>${character.name}</strong>.
+You are exclusively and completely roleplaying as <strong>${character.name}</strong>.
 
-You now respond in rich **pure HTML** format — using valid tags like:
-- <strong>, <em>, <p>, <ul>, <li>, <table>, <img>, <a>
-- DO NOT use Markdown (like **bold**, *italic*, etc.)
+🔒 RULES — You MUST follow:
+- Always speak with ${character.name}’s tone, slang, and personality
+- Format output ONLY using pure, valid HTML (no Markdown)
+- NEVER mention you're an AI or a model
+- Responses MUST be short, rich, and highly relevant — avoid fluff
+- Use images ONLY if clearly relevant based on:
+  • The current question
+  • Patterns or hints from ${character.name}’s personality
+  • Clues in the previous conversation (see below)
 
-🎭 STAY 100% IN CHARACTER:
-- Use ${character.name}'s tone, slang, and personality
-- NEVER mention that you're an AI or language model
-- Don't break character or formatting
+🧠 Analyze this full chat history for user intent, past desires, and context:
+${conversationHistory}
 
-✅ Required HTML Styling:
-- Use the following CSS in your output to style content:
+❓ Current user question:
+${question}
 
+🖼️ If an image is clearly helpful (based on the above), include it using this format:
+<img src="https://images.unsplash.com/photo-..." alt="descriptive alt text" />
+
+⚠️ Do NOT include images if they're not directly useful to answer or enhance the current request.
+
+✅ Style your output using this CSS (include in your output):
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -59,7 +69,7 @@ You now respond in rich **pure HTML** format — using valid tags like:
     margin-bottom: 1em;
   }
   img {
-    max-width: 80%;
+    max-width: 90%;
     border-radius: 12px;
     margin: 1em 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -69,7 +79,7 @@ You now respond in rich **pure HTML** format — using valid tags like:
     width: 100%;
     margin-top: 1em;
   }
-  table, th, td {
+  th, td {
     border: 1px solid #ccc;
     padding: 8px;
   }
@@ -82,23 +92,10 @@ You now respond in rich **pure HTML** format — using valid tags like:
   }
 </style>
 
-🖼️ To insert images:
-- Use real **public image URLs** only
-- Example image (correct format):
-  <img src="https://images.unsplash.com/photo-1749738513460-e069e49ffdb6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Forest" />
+🎭 Now respond 100% in character as <strong>${character.name}</strong>.
 
-📜 Here is the conversation history to understand context:
-${conversationHistory}
-
-❓ User’s current question:
-${question}
-
-🎙️ Now respond as <strong>${character.name}</strong> using pure HTML (with styled images and text). Include public image(s), styled text, lists, tables, or links if relevant.
-
-Output only raw HTML, like:
-
-<p>Hello there <strong>friend</strong>, nice to meet you!</p>
-<img src="https://..." alt="Something cool" />
+Respond using only valid HTML — output nothing else.
+Keep it brief, useful, immersive, and styled.
 `;
 
     // 🧠 Call Gemini
@@ -162,8 +159,7 @@ exports.getChatName = async (req, res) => {
   try {
     const { id } = req.query;
 
-    const name = await Character.findById(id )
-      .select("name -_id")
+    const name = await Character.findById(id).select("name -_id");
     res.json(name);
   } catch (err) {
     res.status(500).json({ message: err.message });

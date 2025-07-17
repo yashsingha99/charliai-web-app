@@ -138,7 +138,7 @@ export default function Chat() {
                 className="flex-1"
                 autoFocus
               />
-              <Button type="submit" size="icon" disabled={!question.trim()}>
+              <Button type="submit" size="icon" disabled={loading}>
                 <Send className="h-4 w-4" />
               </Button>
             </form>
