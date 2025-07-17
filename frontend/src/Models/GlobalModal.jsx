@@ -7,7 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../components/ui/dialog";
+} from "../Components/ui/dialog";
 import { Button } from "../Components/ui/button";
 import { Input } from "../Components/ui/input";
 
