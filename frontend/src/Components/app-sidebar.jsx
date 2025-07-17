@@ -92,7 +92,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar {...props}>
+    <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
