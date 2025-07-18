@@ -1,5 +1,5 @@
 const express = require('express');
-const { askQuestion, getPreviousQAs, getPreviousQAsByCharacter, getPreviousQsByCharacter, getChatName } = require('../controllers/documentController');
+const { askQuestion, getPreviousQAs, getPreviousQAsByCharacter, getPreviousQsByCharacter, getChatName, deleteChat,editChat } = require('../controllers/documentController');
 const { createCharacter, getCharacters } = require('../controllers/character.controller');
 
 const router = express.Router();
@@ -11,4 +11,6 @@ router.get('/previousQuestions', getPreviousQsByCharacter);
 router.post('/createCharacter', createCharacter );
 router.get('/getCharacters', getCharacters);
 router.get('/getChatName', getChatName);
+router.delete('/deleteChat', deleteChat);
+router.patch('/editChat', editChat);
 module.exports = router;

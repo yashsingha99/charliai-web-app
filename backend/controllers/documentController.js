@@ -165,3 +165,49 @@ exports.getChatName = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.deleteChat = async (req, res) => {
+
+  try {
+    const { id } = req.query;
+
+    if (!id) {
+      return res.status(400).json({ message: "Chat ID is required." });
+    }
+
+    await QuestionAnswer.deleteMany({ character: id });
+
+    await Character.findByIdAndDelete(id);
+
+    res.json({ message: "Chat and related QAs deleted successfully." });
+  } catch (err) {
+    console.error("Error deleting chat:", err.message);
+    res.status(500).json({ message: "Server Error" });
+  }
+}
+
+exports.editChat = async (req, res) => {  
+
+  try {
+    const { id, name, description } = req.body;
+
+    if (!id || !name) {
+      return res.status(400).json({ message: "ID, name, and description are required." });
+    }
+
+    const updatedCharacter = await Character.findByIdAndUpdate(
+      id,
+      { name, description },
+      { new: true }
+    );
+
+    if (!updatedCharacter) {
+      return res.status(404).json({ message: "Character not found." });
+    }
+
+    res.json(updatedCharacter);
+  } catch (err) {
+    console.error("Error editing chat:", err.message);
+    res.status(500).json({ message: "Server Error" });
+  }
+}
