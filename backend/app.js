@@ -7,7 +7,7 @@ const path = require('path');
 const documentRoutes = require('./routes/documentRoutes');
 const characterRoutes = require('./routes/character.route');
 const  Session = require('./models/session');
-
+const serverless = require('serverless-http');
 
 const app = express();
 
@@ -74,3 +74,5 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = serverless(app);
